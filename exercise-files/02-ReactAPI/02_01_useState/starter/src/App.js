@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 /*
@@ -10,14 +10,28 @@ import "./App.css";
 */
 
 function App() {
-  // const [values, setValues] = useState({ random1: 0, random2: 0 });
+  const [input, setInput] = useState(0);
+  const [result, setResult] = useState(0);
+  const [displayMsg, setDisplayMsg] = useState("");
+  const [values, setValues] = useState({ random1: 0, random2: 0 });
+
+  useEffect(() => {
+    if (result === input) {
+      setDisplayMsg("You guessed right!");
+    } else {
+      setDisplayMsg("Try Again :(");
+    }
+  }, [result, input]);
 
   const generateRandomValues = () => {
     const random1 = Math.floor(Math.random() * 50);
     const random2 = Math.floor(Math.random() * 50);
+    setValues({ random1, random2 });
   };
 
-  const guessTheNumber = () => {};
+  const guessTheNumber = () => {
+    setResult(parseInt(values.random1) + parseInt(values.random2));
+  };
 
   return (
     <div className="p-5" style={{ width: "80%" }}>
@@ -29,8 +43,8 @@ function App() {
             <div className="p-2" style={{ width: "100%" }}>
               <div className="row">
                 <div className="col-8">
-                  <span className="text-secondary h1 mb-2 mx-5">0</span>
-                  <span className="text-secondary h1 mb-2 mx-5">0</span>
+                  <span className="text-secondary h1 mb-2 mx-5">{values.random1}</span>
+                  <span className="text-secondary h1 mb-2 mx-5">{values.random2}</span>
                 </div>
                 <button
                   onClick={generateRandomValues}
@@ -59,7 +73,7 @@ function App() {
                 <input
                   type="number"
                   className="form-control"
-                  onChange={(e) => console.log(e.target.value)}
+                  onChange={(e) => setInput(parseInt(e.target.value))}
                 />
               </div>
               <div className="col-4">
@@ -89,7 +103,7 @@ function App() {
             style={{ width: "50%" }}
           >
             <div className="d-flex text-success justify-content-center mb-5">
-              <p className="h1"></p>
+              <p className="h1">{displayMsg}</p>
             </div>
           </div>
         </div>
